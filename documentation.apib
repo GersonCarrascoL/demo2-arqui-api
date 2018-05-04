@@ -1,0 +1,95 @@
+FORMAT: 1A
+HOST: http://demo2-arqui.azurewebsites.net
+
+# DOCUMENTATION API
+Simple documentation 
+
+## Group User
+## Register User [/api/v1/users]
+### Register a user [POST]
+Create a user for application mobile
+
++ Request(application/x-www-form-urlencoded)
+
+    + Attributes
+        + userFirstName:Gerson(string,required)
+        + userLastName:Carrasco(string,required)
+        + userPhone:984343775(string,required)
+        + userEmail:gerson.carrasco@gmail.com(string,required)
+        + userPassword:123456(string,required)
+
+
++ Response 201 (application/json)
+
+        {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE1MjQxNTg1NjV9.8RO7S2trzivuPTk-caWnCJbLo_RAgypQtgpzn-24skU"
+        }
+
++ Response 202 (application/json)
+
+        {
+            "message": "Error"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "Error"
+        }
+
+## Login user [/api/v1/users/login]
+### Login user[POST]
+
++ Request (application/x-www-form-urlencoded)
+
+    + Attributes
+        + userEmail:gerson.carrasco@gmail.com(string,required)
+        + userPassword:123456(string,required)
+
++ Response 200 (application/json)
+
+        {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE1MjQ2ODc3NzZ9.olZZIPpemUsTgR90-sVqv3khC7sOUNfdwzz6ac9eQnw",
+            "idUser": 1
+        }
+
++ Response 202 (application/json)
+
+        {
+            "message": "Error"
+        }
+
++ Response 500 (application/json)
+
+        {
+            "message": "Error"
+        }
+
+## Group Food
+## Get Foods [/api/v1/foods/{foodtype}]
+### View list of foods by type[GET]
+List foods
++ Parameters
+    + foodtype(required,number)
+
++ Response 200 (application/json)
+
+        {
+            "foods": [
+                {
+                    "idFood": 7,
+                    "foodName": "Manzanilla",
+                    "idFoodType": 4
+                },
+                {
+                    "idFood": 8,
+                    "foodName": "Gasesoa",
+                    "idFoodType": 4
+                }
+            ]
+        }
++ Response 500 (application/json)
+
+        {
+            "message" : "Error"
+        }

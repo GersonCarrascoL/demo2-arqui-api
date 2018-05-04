@@ -10,12 +10,14 @@ const express = require('express'),
     routesExample = require('./routes/example-router'),
     routesFood = require('./routes/food-router'),
     routesUser = require('./routes/user-router'),
+    routesDocumentation = require('./routes/documentation-router'),
     port = (process.env.PORT || 5000),
     cors = require('cors')
 
 app
     .set('port', port)
 
+    .use(express.static('public'))
     .use(cors())
     .use(bodyParser.json())
     .use(bodyParser.urlencoded({extended: false}))
@@ -24,5 +26,6 @@ app
     .use(routesExample)
     .use(routesFood)
     .use(routesUser)
+    .use(routesDocumentation)
 
 ioServer.listen(port)
