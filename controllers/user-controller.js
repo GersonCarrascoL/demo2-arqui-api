@@ -56,7 +56,13 @@ class UserController{
                 bcrypt.compare(user.userPassword, data[0][0].userPassword, function (err, response) {
                     if (response == true) {
                         return res.status(200).send({
-                            token: jwt.createToken(user)
+                            token: jwt.createToken(user),
+                            user:{
+                                userFirstName:data[0][0].userFirstName,
+                                userLastName:data[0][0].userLastName,
+                                userPhone:data[0][0].userPhone,
+                                userEmail:data[0][0].userEmail
+                            }
                         })
                     } else {
                         return res.status(202).send({
