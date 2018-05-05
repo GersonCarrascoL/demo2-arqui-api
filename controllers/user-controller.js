@@ -4,7 +4,9 @@ const UserModel = require('../models/user-model'),
     um = new UserModel(),
     jwtService = require('../services/jwt'),
     jwt = new jwtService(),
-    bcrypt = require('bcrypt')
+    bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
+    util = require('util')
 
 class UserController{
     userRegister(req,res) {
@@ -55,6 +57,11 @@ class UserController{
             } else {
                 bcrypt.compare(user.userPassword, data[0][0].userPassword, function (err, response) {
                     if (response == true) {
+                        let tokenEntryFood = getSASToken('arqui-demo2','entryfood','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=');
+                        let tokenFood = getSASToken('arqui-demo2','food','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=');
+                        let tokenDessert = getSASToken('arqui-demo2','dessert','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=');
+                        let tokenDrink = getSASToken('arqui-demo2','drink','RootManageSharedAccessKey','j6svY26uyvAGcqhoz/8iQ6gLvPhFFQl5P0Bv4kWrV4Q=');
+                
                         return res.status(200).send({
                             token: jwt.createToken(user),
                             user:{
@@ -62,7 +69,11 @@ class UserController{
                                 userLastName:data[0][0].userLastName,
                                 userPhone:data[0][0].userPhone,
                                 userEmail:data[0][0].userEmail
-                            }
+                            },
+                            tokenEntryFood:tokenEntryFood,
+                            tokenFood:tokenFood,
+                            tokenDessert:tokenDessert,
+                            tokenDrink:tokenDrink
                         })
                     } else {
                         return res.status(202).send({
@@ -72,6 +83,29 @@ class UserController{
                 })
             }
         })
+    }
+}
+
+function getSASToken(serviceNamespace, entityPath, sasKeyName, sasKey) { 
+    var uri = "http://" + serviceNamespace + 
+    ".servicebus.windows.net/" + entityPath; 
+
+    var encodedResourceUri = encodeURIComponent(uri); 
+
+    var expireInSeconds = Math.round(minutesFromNow(5)/1000);
+  
+    var plainSignature = encodedResourceUri + "\n" + expireInSeconds; 
+    
+    var signature = crypto.createHmac('sha256', sasKey)
+                            .update(plainSignature)
+                            .digest('base64'); 
+    return util.format('SharedAccessSignature sig=%s&se=%s&skn=%s&sr=%s', 
+                encodeURIComponent(signature), expireInSeconds, sasKeyName, encodedResourceUri);; 
+
+    function minutesFromNow(minutes) {
+          var date = new Date();
+          date.setMinutes(date.getMinutes() + minutes);
+          return date;
     }
 }
 
